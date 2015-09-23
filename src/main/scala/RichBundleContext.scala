@@ -47,7 +47,7 @@ private[scalamodules] class RichBundleContext(context: BundleContext) {
       lazy val allInterfacesOrClass = {
         def allInterfaces(clazz: Class[_]) = {
           def interfacesWithoutScalaObject(clazz: Class[_]) =
-            clazz.getInterfaces.toList filter { _ != classOf[ScalaObject] }
+            clazz.getInterfaces.toList filter { _ != classOf[AnyRef] }
           @tailrec
           def allInterfacesTR(interfaces: List[Class[_]], result: List[Class[_]]): List[Class[_]] =
             interfaces match {
@@ -68,7 +68,7 @@ private[scalamodules] class RichBundleContext(context: BundleContext) {
 
     val serviceRegistration =
       context.registerService(interfaces, service, if (properties.isEmpty) null else properties)
-    logger info "Created service %s with interfaces %s and properties %s.".format(service, interfaces, properties)
+    //logger info "Created service %s with interfaces %s and properties %s.".format(service, interfaces, properties)
     serviceRegistration
   }
 

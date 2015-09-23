@@ -1,4 +1,5 @@
-h1. ScalaModules
+ScalaModules
+=============
 
 ScalaModules is an elegant and intuitive domain specific language for "OSGi":http://www.osgi.org development written in the "Scala":http://www.scala-lang.org programming language.
 

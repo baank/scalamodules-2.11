@@ -17,7 +17,7 @@ package com.weiglewilczek.scalamodules
 
 import org.osgi.framework.BundleContext
 
-private[scalamodules] class ServiceFinder[I <: AnyRef](
+class ServiceFinder[I <: AnyRef](
     interface: Class[I],
     context: BundleContext) {
 
@@ -33,12 +33,39 @@ private[scalamodules] class ServiceFinder[I <: AnyRef](
     require(f != null, "The function to be applied to the service must not be null!")
     context getServiceReference interface.getName match {
       case null => {
-        logger info "Could not find a ServiceReference for interface %s.".format(interface.getName)
+        //logger info "Could not find a ServiceReference for interface %s.".format(interface.getName)
         None
       }
       case ref => {
-        logger info "Found a ServiceReference for interface %s.".format(interface.getName)
+//        logger info "Found a ServiceReference for interface %s.".format(interface.getName)
         invokeService(ref, f, context)
+      }
+    }
+  }
+
+  def andApplyUnget[T](f: I => T): Option[T] = {
+    require(f != null, "The function to be applied to the service must not be null!")
+    context getServiceReference interface.getName match {
+      case null => {
+        //logger info "Could not find a ServiceReference for interface %s.".format(interface.getName)
+        None
+      }
+      case ref => {
+//        logger info "Found a ServiceReference for interface %s.".format(interface.getName)
+        invokeServiceUnget(ref, f, context)
+      }
+    }
+  }
+
+  def andUnget = {
+    context getServiceReference interface.getName match {
+      case null => {
+        //logger info "Could not find a ServiceReference for interface %s.".format(interface.getName)
+        None
+      }
+      case ref => {
+//        logger info "Found a ServiceReference for interface %s.".format(interface.getName)
+        serviceUnget(ref, context)
       }
     }
   }
@@ -52,11 +79,11 @@ private[scalamodules] class ServiceFinder[I <: AnyRef](
     require(f != null, "The function to be applied to the service must not be null!")
     context getServiceReference interface.getName match {
       case null => {
-        logger info "Could not find a ServiceReference for interface %s.".format(interface.getName)
+        //logger info "Could not find a ServiceReference for interface %s.".format(interface.getName)
         None
       }
       case ref => {
-        logger info "Found a ServiceReference for interface %s.".format(interface.getName)
+//        logger info "Found a ServiceReference for interface %s.".format(interface.getName)
         invokeService(ref, f(_: I, ref.properties), context)
       }
     }
@@ -91,11 +118,11 @@ private[scalamodules] class ServicesFinder[I <: AnyRef](
     require(f != null, "The function to be applied to the service must not be null!")
     context.getServiceReferences(interface.getName, filter map { _.toString } orNull) match {
       case null => {
-        logger info "Could not find any ServiceReferences for interface %s and optional filter %s.".format(interface.getName, filter)
+        //logger info "Could not find any ServiceReferences for interface %s and optional filter %s.".format(interface.getName, filter)
         Nil
       }
       case refs => {
-        logger info "Found %s ServiceReferences for interface %s and optional filter %s.".format(refs.size, interface.getName, filter)
+//        logger info "Found %s ServiceReferences for interface %s and optional filter %s.".format(refs.size, interface.getName, filter)
         refs.toList flatMap { invokeService(_, f, context) }
       }
     }
@@ -110,13 +137,14 @@ private[scalamodules] class ServicesFinder[I <: AnyRef](
     require(f != null, "The function to be applied to the service must not be null!")
     context.getServiceReferences(interface.getName, filter map { _.toString } orNull) match {
       case null => {
-        logger info "Could not find any ServiceReferences for interface %s and optional filter %s.".format(interface.getName, filter)
+        //logger info "Could not find any ServiceReferences for interface %s and optional filter %s.".format(interface.getName, filter)
         Nil
       }
       case refs => {
-        logger info "Found %s ServiceReferences for interface %s and optional filter %s.".format(refs.size, interface.getName, filter)
+//        logger info "Found %s ServiceReferences for interface %s and optional filter %s.".format(refs.size, interface.getName, filter)
         refs.toList flatMap { ref => invokeService(ref, f(_: I, ref.properties), context) }
       }
     }
   }
+
 }
