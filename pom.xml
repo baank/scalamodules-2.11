@@ -17,19 +17,7 @@
         <scala.version>2.11.7</scala.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>Nexus</id>
-            <url>https://nexus.ad.colesfinancialservices.com.au/content/groups/allreleases/</url>
-        </repository>
-    </repositories>
-    <distributionManagement>
-        <repository>
-            <id>ColesFS</id>
-            <name>Libraries</name>
-            <url>https://nexus.ad.colesfinancialservices.com.au/content/repositories/colesfs-libraries/</url>
-        </repository>
-    </distributionManagement>
+
 
     <dependencies>
         <dependency>
